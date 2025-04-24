@@ -1,36 +1,32 @@
-//
-//  StoreSection.swift
-//  Starwin Games
-//
-//  Created by Dias Atudinov on 24.04.2025.
-//
-
-
 import SwiftUI
 
 enum StoreSection: Codable, Hashable {
     case backgrounds
-    case bird
+    case skin
 }
 
 class StoreViewModelSG: ObservableObject {
     @Published var shopTeamItems: [Item] = [
         
-        Item(name: "bg1", image: "gameBg1AO", icon: "iconBg1AO", section: .backgrounds, price: 100),
-        Item(name: "bg2", image: "gameBg2AO", icon: "iconBg2AO", section: .backgrounds, price: 100),
-        Item(name: "bg3", image: "gameBg3AO", icon: "iconBg3AO", section: .backgrounds, price: 100),
+        Item(name: "bg1", image: "gameBg1SG", icon: "backIcon1SG", section: .backgrounds, price: 100),
+        Item(name: "bg2", image: "gameBg2SG", icon: "backIcon2SG", section: .backgrounds, price: 100),
+        Item(name: "bg3", image: "gameBg3SG", icon: "backIcon3SG", section: .backgrounds, price: 100),
+        Item(name: "bg4", image: "gameBg4SG", icon: "backIcon4SG", section: .backgrounds, price: 100),
+        Item(name: "bg5", image: "gameBg5SG", icon: "backIcon5SG", section: .backgrounds, price: 100),
         
         
-        Item(name: "bird1", image: "gameBg3GE", icon: "iconBird1AO", section: .bird, price: 100),
-        Item(name: "bird2", image: "gameBg3GE", icon: "iconBird2AO", section: .bird, price: 100),
-        Item(name: "bird3", image: "gameBg3GE", icon: "iconBird3AO", section: .bird, price: 100),
-        Item(name: "bird4", image: "gameBg3GE", icon: "iconBird4AO", section: .bird, price: 100),
+        Item(name: "skin1", image: "gameSkin1SG", icon: "iconSkin1SG", section: .skin, price: 100),
+        Item(name: "skin2", image: "gameSkin2SG", icon: "iconSkin2SG", section: .skin, price: 100),
+        Item(name: "skin3", image: "gameSkin3SG", icon: "iconSkin3SG", section: .skin, price: 100),
+        Item(name: "skin4", image: "gameSkin4SG", icon: "iconSkin4SG", section: .skin, price: 100),
+        Item(name: "skin5", image: "gameSkin5SG", icon: "iconSkin5SG", section: .skin, price: 100),
+        Item(name: "skin6", image: "gameSkin6SG", icon: "iconSkin6SG", section: .skin, price: 100),
          
     ]
     
     @Published var boughtItems: [Item] = [
-        Item(name: "bg1", image: "gameBg1GE", icon: "icon1GE", section: .backgrounds, price: 500),
-        Item(name: "bird1", image: "gameBg3GE", icon: "iconBird1AO", section: .bird, price: 500),
+        Item(name: "bg1", image: "gameBg1AO", icon: "backIcon1SG", section: .backgrounds, price: 100),
+        Item(name: "skin1", image: "gameSkin1SG", icon: "iconSkin1SG", section: .skin, price: 100),
     ] {
         didSet {
             saveBoughtItem()
