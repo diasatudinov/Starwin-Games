@@ -1,0 +1,12 @@
+{
+  "images" : [
+    {
+      "filename" : "iconSkin3SG.png",
+      "idiom" : "universal"
+    }
+  ],
+  "info" : {
+    "author" : "xcode",
+    "version" : 1
+  }
+}

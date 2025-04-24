@@ -1,0 +1,12 @@
+{
+  "images" : [
+    {
+      "filename" : "offTextSG.png",
+      "idiom" : "universal"
+    }
+  ],
+  "info" : {
+    "author" : "xcode",
+    "version" : 1
+  }
+}

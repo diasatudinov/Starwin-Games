@@ -1,0 +1,12 @@
+{
+  "images" : [
+    {
+      "filename" : "loadingTextSG.png",
+      "idiom" : "universal"
+    }
+  ],
+  "info" : {
+    "author" : "xcode",
+    "version" : 1
+  }
+}
