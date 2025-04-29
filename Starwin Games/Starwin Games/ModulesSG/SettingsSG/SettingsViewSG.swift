@@ -19,12 +19,12 @@ struct SettingsViewSG: View {
                         Image(.soundIconSG)
                             .resizable()
                             .scaledToFit()
-                            .frame(height: GEDeviceManager.shared.deviceType == .pad ? 140:70)
+                            .frame(height: SGDeviceManager.shared.deviceType == .pad ? 140:70)
                         VStack {
                             Image(.soundTextSG)
                                 .resizable()
                                 .scaledToFit()
-                                .frame(height: GEDeviceManager.shared.deviceType == .pad ? 50:25)
+                                .frame(height: SGDeviceManager.shared.deviceType == .pad ? 50:25)
                             Button {
                                 withAnimation {
                                     settingsVM.soundEnabled.toggle()
@@ -34,7 +34,7 @@ struct SettingsViewSG: View {
                                 Image(settingsVM.soundEnabled ? .onSG:.offSG)
                                     .resizable()
                                     .scaledToFit()
-                                    .frame(height: GEDeviceManager.shared.deviceType == .pad ? 50:25)
+                                    .frame(height: SGDeviceManager.shared.deviceType == .pad ? 50:25)
                             }
                         }
                     }
@@ -43,12 +43,12 @@ struct SettingsViewSG: View {
                         Image(.musicIconSG)
                             .resizable()
                             .scaledToFit()
-                            .frame(height: GEDeviceManager.shared.deviceType == .pad ? 140:70)
+                            .frame(height: SGDeviceManager.shared.deviceType == .pad ? 140:70)
                         VStack {
                             Image(.musicTextSG)
                                 .resizable()
                                 .scaledToFit()
-                                .frame(height: GEDeviceManager.shared.deviceType == .pad ? 50:25)
+                                .frame(height: SGDeviceManager.shared.deviceType == .pad ? 50:25)
                             Button {
                                 withAnimation {
                                     settingsVM.musicEnabled.toggle()
@@ -58,7 +58,7 @@ struct SettingsViewSG: View {
                                 Image(settingsVM.musicEnabled ? .onSG:.offSG)
                                     .resizable()
                                     .scaledToFit()
-                                    .frame(height: GEDeviceManager.shared.deviceType == .pad ? 50:25)
+                                    .frame(height: SGDeviceManager.shared.deviceType == .pad ? 50:25)
                             }
                         }
                     }
@@ -67,12 +67,12 @@ struct SettingsViewSG: View {
                         Image(.vibraIconSG)
                             .resizable()
                             .scaledToFit()
-                            .frame(height: GEDeviceManager.shared.deviceType == .pad ? 140:70)
+                            .frame(height: SGDeviceManager.shared.deviceType == .pad ? 140:70)
                         VStack {
                             Image(.vibraTextSG)
                                 .resizable()
                                 .scaledToFit()
-                                .frame(height: GEDeviceManager.shared.deviceType == .pad ? 50:25)
+                                .frame(height: SGDeviceManager.shared.deviceType == .pad ? 50:25)
                             Button {
                                 withAnimation {
                                     settingsVM.vibraEnabled.toggle()
@@ -82,7 +82,7 @@ struct SettingsViewSG: View {
                                 Image(settingsVM.vibraEnabled ? .onSG:.offSG)
                                     .resizable()
                                     .scaledToFit()
-                                    .frame(height: GEDeviceManager.shared.deviceType == .pad ? 50:25)
+                                    .frame(height: SGDeviceManager.shared.deviceType == .pad ? 50:25)
                             }
                         }
                     }
@@ -93,12 +93,12 @@ struct SettingsViewSG: View {
                         Image(.rateUsIconSG)
                             .resizable()
                             .scaledToFit()
-                            .frame(height: GEDeviceManager.shared.deviceType == .pad ? 50:120)
+                            .frame(height: SGDeviceManager.shared.deviceType == .pad ? 50:120)
                     }
                 }.offset(x: 0, y: 40)
                 
                 
-            }.frame(height: GEDeviceManager.shared.deviceType == .pad ? 1000:500)
+            }.frame(height: SGDeviceManager.shared.deviceType == .pad ? 1000:500)
             
             VStack {
                 HStack {
@@ -110,7 +110,7 @@ struct SettingsViewSG: View {
                             Image(.homeIconSG)
                                 .resizable()
                                 .scaledToFit()
-                                .frame(height: GEDeviceManager.shared.deviceType == .pad ? 150:75)
+                                .frame(height: SGDeviceManager.shared.deviceType == .pad ? 150:75)
                         }
                         Spacer()
                        

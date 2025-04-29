@@ -10,7 +10,7 @@ struct MenuViewSG: View {
 //    @StateObject var achievementVM = AchievementsViewModel()
     @StateObject var settingsVM = SettingsViewModelSG()
 //    @StateObject var calendarVM = CalendarViewModel()
-//    @StateObject var shopVM = ShopViewModelGE()
+    @StateObject var shopVM = StoreViewModelSG()
     
     var body: some View {
         
@@ -19,8 +19,8 @@ struct MenuViewSG: View {
             Image(.logoSG)
                 .resizable()
                 .scaledToFit()
-                .frame(height: GEDeviceManager.shared.deviceType == .pad ? 300:150)
-                .padding(.bottom, GEDeviceManager.shared.deviceType == .pad ? 440:220)
+                .frame(height: SGDeviceManager.shared.deviceType == .pad ? 300:150)
+                .padding(.bottom, SGDeviceManager.shared.deviceType == .pad ? 440:220)
             
             VStack(spacing: 0) {
                 HStack(alignment: .top) {
@@ -34,7 +34,7 @@ struct MenuViewSG: View {
                         Image(.settingsIconSG)
                             .resizable()
                             .scaledToFit()
-                            .frame(height: GEDeviceManager.shared.deviceType == .pad ? 140:70)
+                            .frame(height: SGDeviceManager.shared.deviceType == .pad ? 140:70)
                     }
                 }
                 
@@ -46,8 +46,8 @@ struct MenuViewSG: View {
                     Image(.playIconSG)
                         .resizable()
                         .scaledToFit()
-                        .frame(height: GEDeviceManager.shared.deviceType == .pad ? 240:180)
-                        .padding(.top, GEDeviceManager.shared.deviceType == .pad ? 180:90)
+                        .frame(height: SGDeviceManager.shared.deviceType == .pad ? 240:180)
+                        .padding(.top, SGDeviceManager.shared.deviceType == .pad ? 180:90)
                 }
                 
                 Spacer()
@@ -59,7 +59,7 @@ struct MenuViewSG: View {
                             Image(.miniGamesIconSG)
                                 .resizable()
                                 .scaledToFit()
-                                .frame(height: GEDeviceManager.shared.deviceType == .pad ? 140:90)
+                                .frame(height: SGDeviceManager.shared.deviceType == .pad ? 140:90)
                         }
                     }
                     
@@ -71,7 +71,7 @@ struct MenuViewSG: View {
                             Image(.shopIconSG)
                                 .resizable()
                                 .scaledToFit()
-                                .frame(height: GEDeviceManager.shared.deviceType == .pad ? 140:70)
+                                .frame(height: SGDeviceManager.shared.deviceType == .pad ? 140:70)
                         }
                         Spacer()
                         
@@ -81,7 +81,7 @@ struct MenuViewSG: View {
                             Image(.achivsIconSG)
                                 .resizable()
                                 .scaledToFit()
-                                .frame(height: GEDeviceManager.shared.deviceType == .pad ? 140:70)
+                                .frame(height: SGDeviceManager.shared.deviceType == .pad ? 140:70)
                         }
                     }
                 }
@@ -118,7 +118,7 @@ struct MenuViewSG: View {
            // AchievementsView(viewModel: achievementVM)
         }
         .fullScreenCover(isPresented: $showShop) {
-           // ShopViewGE(viewModel: shopVM)
+            ShopViewSG(viewModel: shopVM)
         }
         .fullScreenCover(isPresented: $showSettings) {
             SettingsViewSG(settingsVM: settingsVM)

@@ -24,7 +24,7 @@ struct ShopViewSG: View {
                                 Image(.backIconSG)
                                     .resizable()
                                     .scaledToFit()
-                                    .frame(height: GEDeviceManager.shared.deviceType == .pad ? 150:75)
+                                    .frame(height: SGDeviceManager.shared.deviceType == .pad ? 150:75)
                             }
                             Spacer()
                             CoinBgSG()
@@ -35,7 +35,7 @@ struct ShopViewSG: View {
                 Image(.shopTextSG)
                     .resizable()
                     .scaledToFit()
-                    .frame(height: GEDeviceManager.shared.deviceType == .pad ? 150:75)
+                    .frame(height: SGDeviceManager.shared.deviceType == .pad ? 150:75)
                 
                 ZStack {
                     Image(.skinsBgSG)
@@ -51,7 +51,7 @@ struct ShopViewSG: View {
                             Image(.arrowLeftIconBgSG)
                                 .resizable()
                                 .scaledToFit()
-                                .frame(height: GEDeviceManager.shared.deviceType == .pad ? 150:75)
+                                .frame(height: SGDeviceManager.shared.deviceType == .pad ? 150:75)
                         }
                             achievementItem(item: viewModel.shopTeamItems.filter({ $0.section == .skin })[skinIndex])
                             
@@ -63,7 +63,7 @@ struct ShopViewSG: View {
                             Image(.arrowLeftIconBgSG)
                                 .resizable()
                                 .scaledToFit()
-                                .frame(height: GEDeviceManager.shared.deviceType == .pad ? 150:75)
+                                .frame(height: SGDeviceManager.shared.deviceType == .pad ? 150:75)
                                 .scaleEffect(x: -1,y: -1)
                         }
                     }
@@ -83,7 +83,7 @@ struct ShopViewSG: View {
                             Image(.arrowLeftIconBgSG)
                                 .resizable()
                                 .scaledToFit()
-                                .frame(height: GEDeviceManager.shared.deviceType == .pad ? 150:75)
+                                .frame(height: SGDeviceManager.shared.deviceType == .pad ? 150:75)
                         }
                         achievementItem(item: viewModel.shopTeamItems.filter({ $0.section == .backgrounds })[backIndex])
                             
@@ -95,7 +95,7 @@ struct ShopViewSG: View {
                             Image(.arrowLeftIconBgSG)
                                 .resizable()
                                 .scaledToFit()
-                                .frame(height: GEDeviceManager.shared.deviceType == .pad ? 150:75)
+                                .frame(height: SGDeviceManager.shared.deviceType == .pad ? 150:75)
                                 .scaleEffect(x: -1,y: -1)
                         }
                     }
@@ -127,7 +127,7 @@ struct ShopViewSG: View {
                 
            
             
-        }.frame(height: GEDeviceManager.shared.deviceType == .pad ? 378:189)
+        }.frame(height: SGDeviceManager.shared.deviceType == .pad ? 378:189)
         
     }
     
