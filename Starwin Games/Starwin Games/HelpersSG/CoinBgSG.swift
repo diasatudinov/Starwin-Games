@@ -9,14 +9,14 @@ struct CoinBgSG: View {
                 .scaledToFit()
             
             Text("\(user.money)")
-                .font(.system(size: GEDeviceManager.shared.deviceType == .pad ? 40:20, weight: .black))
+                .font(.system(size: SGDeviceManager.shared.deviceType == .pad ? 40:20, weight: .black))
                 .foregroundStyle(.yellow)
                 .textCase(.uppercase)
-                .offset(x: GEDeviceManager.shared.deviceType == .pad ? 30:15, y: GEDeviceManager.shared.deviceType == .pad ? 16:8)
+                .offset(x: SGDeviceManager.shared.deviceType == .pad ? 30:15, y: SGDeviceManager.shared.deviceType == .pad ? 16:8)
             
             
             
-        }.frame(height: GEDeviceManager.shared.deviceType == .pad ? 126:63)
+        }.frame(height: SGDeviceManager.shared.deviceType == .pad ? 126:63)
         
     }
 }
