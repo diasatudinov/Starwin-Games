@@ -24,22 +24,22 @@ struct GameView: View {
                             presentationMode.wrappedValue.dismiss()
                             
                         } label: {
-                            Image(.homeIconAO)
+                            Image(.backIconSG)
                                 .resizable()
                                 .scaledToFit()
-                                .frame(height: AODeviceInfo.shared.deviceType == .pad ? 100:50)
+                                .frame(height: SGDeviceManager.shared.deviceType == .pad ? 100:50)
                         }
-                        Button {
-                            gameScene.restartGame()
-                            
-                        } label: {
-                            Image(.restartIconAO)
-                                .resizable()
-                                .scaledToFit()
-                                .frame(height: AODeviceInfo.shared.deviceType == .pad ? 100:50)
-                        }
+//                        Button {
+//                            gameScene.restartGame()
+//                            
+//                        } label: {
+//                            Image(.restartIconAO)
+//                                .resizable()
+//                                .scaledToFit()
+//                                .frame(height: SGDeviceManager.shared.deviceType == .pad ? 100:50)
+//                        }
                         Spacer()
-                        MoneyViewDC()
+                        CoinBgSG()
                     }.padding([.horizontal, .top])
                 }
                 

@@ -8,11 +8,12 @@
 
 import SpriteKit
 
+// Тип движения корабля
 enum MovementType: Int {
-    case straight = 0      // прямо
-    case turnLeft = 1      // поворот налево
-    case turnRight = 2     // поворот направо
-    case uTurn = 3         // разворот на 180°
+    case straight = 0
+    case turnLeft = 1
+    case turnRight = 2
+    case uTurn = 3
 }
 
 struct ShipConfig {
@@ -25,6 +26,8 @@ struct ShipConfig {
 class GameScene: SKScene, SKPhysicsContactDelegate {
     var levelIndex: Int = 0
     private var lastTappedShip: SKSpriteNode?
+    private var shipArrows: [SKSpriteNode: SKSpriteNode] = [:]
+    private var bigArrows: [SKSpriteNode: SKSpriteNode] = [:]
 
     override func didMove(to view: SKView) {
         physicsWorld.contactDelegate = self
@@ -35,64 +38,77 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     private func setupLevel(_ index: Int) {
         let w = size.width
         let h = size.height
+        let fieldHeight = h / 2
+        let fieldCenterY = h / 2
         var roadConfigs: [(position: CGPoint, size: CGSize)] = []
         var shipConfigs: [ShipConfig] = []
 
         switch index {
         case 0:
             roadConfigs = [
-                (CGPoint(x: w/2, y: h/2), CGSize(width: w, height: 100)),
-                (CGPoint(x: w/2, y: h/2), CGSize(width: 100, height: h))
+                (CGPoint(x: w/2, y: fieldCenterY), CGSize(width: w, height: 100)),
+                (CGPoint(x: w/2, y: fieldCenterY), CGSize(width: 100, height: fieldHeight))
             ]
             shipConfigs = [
-                ShipConfig(name: "ship0", initialPosition: CGPoint(x: w/2, y: h - 50), direction: CGVector(dx: 0, dy: -1), movement: .straight),
-                ShipConfig(name: "ship1", initialPosition: CGPoint(x: 50, y: h/2), direction: CGVector(dx: 1, dy: 0), movement: .turnLeft),
-                ShipConfig(name: "ship2", initialPosition: CGPoint(x: w/2, y: 50), direction: CGVector(dx: 0, dy: 1), movement: .turnRight),
-                ShipConfig(name: "ship3", initialPosition: CGPoint(x: w - 50, y: h/2), direction: CGVector(dx: -1, dy: 0), movement: .uTurn)
+                ShipConfig(name: "ship0", initialPosition: CGPoint(x: w/2, y: fieldCenterY + fieldHeight/2 - 50), direction: CGVector(dx: 0, dy: -1), movement: .straight),
+                ShipConfig(name: "ship1", initialPosition: CGPoint(x: w/2 - fieldHeight/2 + 50, y: fieldCenterY), direction: CGVector(dx: 1, dy: 0), movement: .turnLeft),
+                ShipConfig(name: "ship2", initialPosition: CGPoint(x: w/2, y: fieldCenterY - fieldHeight/2 + 50), direction: CGVector(dx: 0, dy: 1), movement: .turnRight),
+                ShipConfig(name: "ship3", initialPosition: CGPoint(x: w/2 + fieldHeight/2 - 80, y: fieldCenterY), direction: CGVector(dx: 1, dy: 0), movement: .straight)
             ]
         default:
             break
         }
 
-        // Отрисовка дорог
         for config in roadConfigs {
             let road = SKSpriteNode(color: .darkGray, size: config.size)
             road.position = config.position
             addChild(road)
         }
 
-        // Настройка кораблей
         for shipConfig in shipConfigs {
-            let ship = SKSpriteNode(imageNamed: "ship")
-            ship.size = CGSize(width: 40, height: 40)
-            ship.position = shipConfig.initialPosition
-            ship.name = shipConfig.name
-            ship.userData = [
-                "initialPosition": NSValue(cgPoint: shipConfig.initialPosition),
-                "direction": NSValue(cgVector: shipConfig.direction),
-                "movementType": shipConfig.movement.rawValue
-            ]
-            ship.physicsBody = SKPhysicsBody(circleOfRadius: 20)
-            ship.physicsBody?.categoryBitMask = 0x1 << 0
-            ship.physicsBody?.contactTestBitMask = 0x1 << 0
-            ship.physicsBody?.collisionBitMask = 0
-            ship.physicsBody?.affectedByGravity = false
-            addChild(ship)
+                   let ship = SKSpriteNode(imageNamed: "shipSG")
+                   ship.size = CGSize(width: 60, height: 60)
+                   ship.position = shipConfig.initialPosition
+                   ship.name = shipConfig.name
+                   ship.zRotation = atan2(shipConfig.direction.dy, shipConfig.direction.dx)
+                   ship.userData = [
+                       "initialPosition": NSValue(cgPoint: shipConfig.initialPosition),
+                       "direction": NSValue(cgVector: shipConfig.direction),
+                       "movementType": shipConfig.movement.rawValue
+                   ]
+                   ship.physicsBody = SKPhysicsBody(circleOfRadius: 20)
+                   ship.physicsBody?.categoryBitMask = 0x1 << 0
+                   ship.physicsBody?.contactTestBitMask = 0x1 << 0
+                   ship.physicsBody?.collisionBitMask = 0
+                   ship.physicsBody?.affectedByGravity = false
+                   addChild(ship)
 
-            // Стрелка у корабля
-            let arrow = SKSpriteNode(imageNamed: "arrow")
-            arrow.size = CGSize(width: 30, height: 30)
-            arrow.position = .zero
-            arrow.zRotation = atan2(shipConfig.direction.dy, shipConfig.direction.dx) - .pi/2
-            ship.addChild(arrow)
+            let arrowTextureName: String
+            switch shipConfig.movement {
+            case .straight:
+                arrowTextureName = "arrow"
+            case .turnLeft:
+                arrowTextureName = "arrowLeft"
+            case .turnRight:
+                arrowTextureName = "arrowRight"
+            case .uTurn:
+                arrowTextureName = "arrowBack"
+            }
+            
+            let arrow = SKSpriteNode(imageNamed: arrowTextureName)
+                   arrow.size = CGSize(width: 20, height: 40)
+            arrow.position = CGPoint(x: 20, y: 0)
+                   arrow.zRotation = -(.pi/2)
+                   ship.addChild(arrow)
+                   shipArrows[ship] = arrow
 
-            // Отдельная большая стрелка на карте
-            let bigArrow = SKSpriteNode(imageNamed: "arrow")
-            bigArrow.size = CGSize(width: 60, height: 60)
-            bigArrow.position = CGPoint(x: shipConfig.initialPosition.x, y: shipConfig.initialPosition.y + 50)
-            bigArrow.zRotation = arrow.zRotation
-            addChild(bigArrow)
-        }
+                   let bigArrow = SKSpriteNode(imageNamed: "arrow")
+                   bigArrow.size = CGSize(width: 60, height: 30)
+                   bigArrow.position = CGPoint(x: shipConfig.initialPosition.x, y: shipConfig.initialPosition.y + 50)
+                   bigArrow.zRotation = ship.zRotation - .pi/2
+                   //addChild(bigArrow)
+                   bigArrows[ship] = bigArrow
+               }
     }
 
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -110,6 +126,14 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     private func startMovement(for ship: SKSpriteNode) {
         guard ship.action(forKey: "moving") == nil else { return }
         lastTappedShip = ship
+
+        if let arrow = shipArrows[ship] {
+            arrow.removeFromParent()
+        }
+        if let bigArrow = bigArrows[ship] {
+            bigArrow.removeFromParent()
+        }
+
         guard
             let dirValue = ship.userData?["direction"] as? NSValue,
             let typeValue = ship.userData?["movementType"] as? NSNumber
