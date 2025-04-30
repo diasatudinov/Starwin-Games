@@ -7,9 +7,8 @@ struct MenuViewSG: View {
     @State private var showMiniGames = false
     @State private var showSettings = false
     
-//    @StateObject var achievementVM = AchievementsViewModel()
+    @StateObject var achievementVM = AchievementsViewModelSG()
     @StateObject var settingsVM = SettingsViewModelSG()
-//    @StateObject var calendarVM = CalendarViewModel()
     @StateObject var shopVM = StoreViewModelSG()
     
     var body: some View {
@@ -109,13 +108,13 @@ struct MenuViewSG: View {
 //                        }
 //                    }
         .fullScreenCover(isPresented: $showGame) {
-            //SelectGameView(shopVM: shopVM)
+            ChooseLevelView(shopVM: shopVM, achievementVM: achievementVM)
         }
         .fullScreenCover(isPresented: $showMiniGames) {
-           // CalendarView(viewModel: calendarVM)
+            MiniGamesChooseView()
         }
         .fullScreenCover(isPresented: $showAchievement) {
-           // AchievementsView(viewModel: achievementVM)
+            AchievementsViewSG(viewModel: achievementVM)
         }
         .fullScreenCover(isPresented: $showShop) {
             ShopViewSG(viewModel: shopVM)

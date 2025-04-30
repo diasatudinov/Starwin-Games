@@ -1,11 +1,3 @@
-//
-//  SpriteViewContainer.swift
-//  Starwin Games
-//
-//  Created by Dias Atudinov on 29.04.2025.
-//
-
-
 import SwiftUI
 import SpriteKit
 
@@ -13,10 +5,21 @@ import SpriteKit
 struct SpriteViewContainer: UIViewRepresentable {
     @StateObject var user = GEUser.shared
     var scene: GameScene
+    @Binding var isWin: Bool
+    @Binding var score: Int
+    var level: Int
     func makeUIView(context: Context) -> SKView {
         let skView = SKView(frame: UIScreen.main.bounds)
         skView.backgroundColor = .clear
         scene.scaleMode = .resizeFill
+        scene.winHandle = {
+            isWin = true
+            user.updateUserMoney(for: 100)
+        }
+        scene.levelIndex = level
+        scene.scoreHandle = {
+            score += 100
+        }
         skView.presentScene(scene)
         
         return skView
