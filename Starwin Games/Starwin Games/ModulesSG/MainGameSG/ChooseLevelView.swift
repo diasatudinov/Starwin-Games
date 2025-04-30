@@ -1,18 +1,69 @@
-//
-//  ChooseLevelView.swift
-//  Starwin Games
-//
-//  Created by Dias Atudinov on 30.04.2025.
-//
-
 import SwiftUI
 
 struct ChooseLevelView: View {
+    @Environment(\.presentationMode) var presentationMode
+    @ObservedObject var shopVM: StoreViewModelSG
+    @ObservedObject var achievementVM: AchievementsViewModelSG
+
+    @State var openGame = false
+    @State var selectedIndex = 0
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        ZStack {
+            VStack {
+                HStack {
+                    HStack(alignment: .top) {
+                        Button {
+                            presentationMode.wrappedValue.dismiss()
+                            
+                        } label: {
+                            Image(.backIconSG)
+                                .resizable()
+                                .scaledToFit()
+                                .frame(height: SGDeviceManager.shared.deviceType == .pad ? 150:75)
+                        }
+                        Spacer()
+                        CoinBgSG()
+                    }.padding([.horizontal, .top])
+                }
+                ScrollView {
+                    HStack {
+                        Spacer()
+                    }
+                    ForEach(Range(0...9)) { index in
+                        ZStack {
+                            Image(.planetLevel1)
+                                .resizable()
+                                .scaledToFit()
+                                .frame(width: 100,height: 100)
+                            
+                            Text("\(index + 1)")
+                                .font(.system(size: 40, weight: .bold))
+                                .foregroundStyle(.black)
+                        }.offset(x: CGFloat(Int.random(in: Range(-65...65))))
+                            .onTapGesture {
+                                selectedIndex = index
+                                DispatchQueue.main.async {
+                                    openGame = true
+                                }
+                                
+                            }
+                    }
+                }
+            }
+        }.background(
+            ZStack {
+                Image(.shopBgSG)
+                    .resizable()
+                    .edgesIgnoringSafeArea(.all)
+                    .scaledToFill()
+            }
+        )
+        .fullScreenCover(isPresented: $openGame) {
+            GameView(shopVM: shopVM, achievementVM: achievementVM, level: selectedIndex)
+        }
     }
 }
 
 #Preview {
-    ChooseLevelView()
+    ChooseLevelView(shopVM: StoreViewModelSG(), achievementVM: AchievementsViewModelSG())
 }

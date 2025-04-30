@@ -30,6 +30,19 @@ class AchievementsViewModelSG: ObservableObject {
         
     }
     
+    func achieveCheck(_ achive: AchievementSG) {
+        guard let index = achievements.firstIndex(where: { $0.image == achive.image })
+        else {
+            return
+        }
+        
+        if achievements[index].achievedCount < achievements[index].achievedMaxCount {
+            achievements[index].achievedCount += 1
+        } else {
+            achievements[index].isAchieved = true
+        }
+    }
+    
     func saveAchievementsItem() {
         if let encodedData = try? JSONEncoder().encode(achievements) {
             UserDefaults.standard.set(encodedData, forKey: userDefaultsAchievementsKey)

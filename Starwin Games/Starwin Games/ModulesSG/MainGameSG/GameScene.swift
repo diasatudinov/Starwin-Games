@@ -1,12 +1,5 @@
-//
-//  PhysicsCategory.swift
-//  Starwin Games
-//
-//  Created by Dias Atudinov on 29.04.2025.
-//
-
-
 import SpriteKit
+import SwiftUI
 
 // Тип движения корабля
 enum MovementType: Int {
@@ -24,17 +17,21 @@ struct ShipConfig {
 }
 
 class GameScene: SKScene, SKPhysicsContactDelegate {
-    var levelIndex: Int = 0
+    @StateObject var shopVM = StoreViewModelSG()
+    var levelIndex: Int?
     private var lastTappedShip: SKSpriteNode?
     private var shipArrows: [SKSpriteNode: SKSpriteNode] = [:]
     private var bigArrows: [SKSpriteNode: SKSpriteNode] = [:]
-
+    
+    var winHandle: (() -> ())?
+    var scoreHandle: (() -> ())?
+    
     override func didMove(to view: SKView) {
         physicsWorld.contactDelegate = self
-        backgroundColor = .black
-        setupLevel(levelIndex)
+        backgroundColor = .clear
+        setupLevel(levelIndex ?? 0)
     }
-
+    
     private func setupLevel(_ index: Int) {
         let w = size.width
         let h = size.height
@@ -42,7 +39,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         let fieldCenterY = h / 2
         var roadConfigs: [(position: CGPoint, size: CGSize)] = []
         var shipConfigs: [ShipConfig] = []
-
+        
         switch index {
         case 0:
             roadConfigs = [
@@ -55,34 +52,141 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                 ShipConfig(name: "ship2", initialPosition: CGPoint(x: w/2, y: fieldCenterY - fieldHeight/2 + 50), direction: CGVector(dx: 0, dy: 1), movement: .turnRight),
                 ShipConfig(name: "ship3", initialPosition: CGPoint(x: w/2 + fieldHeight/2 - 80, y: fieldCenterY), direction: CGVector(dx: 1, dy: 0), movement: .straight)
             ]
+        case 1:
+            roadConfigs = [
+                (CGPoint(x: w/2, y: fieldCenterY), CGSize(width: w, height: 100)),
+                (CGPoint(x: w/2, y: fieldCenterY), CGSize(width: 100, height: fieldHeight))
+            ]
+            shipConfigs = [
+                ShipConfig(name: "ship0", initialPosition: CGPoint(x: w/2, y: fieldCenterY + fieldHeight/2 - 50), direction: CGVector(dx: 0, dy: 1), movement: .straight),
+                ShipConfig(name: "ship1", initialPosition: CGPoint(x: w/2 - fieldHeight/2 + 50, y: fieldCenterY), direction: CGVector(dx: 1, dy: 0), movement: .turnLeft),
+                ShipConfig(name: "ship2", initialPosition: CGPoint(x: w/2, y: fieldCenterY - fieldHeight/2 + 50), direction: CGVector(dx: 0, dy: 1), movement: .turnRight),
+                ShipConfig(name: "ship3", initialPosition: CGPoint(x: w/2 + fieldHeight/2 - 80, y: fieldCenterY), direction: CGVector(dx: -1, dy: 0), movement: .straight)
+            ]
+            
+        case 2:
+            roadConfigs = [
+                (CGPoint(x: w/2, y: fieldCenterY), CGSize(width: w, height: 100)),
+                (CGPoint(x: w/2, y: fieldCenterY), CGSize(width: 100, height: fieldHeight))
+            ]
+            shipConfigs = [
+                ShipConfig(name: "ship0", initialPosition: CGPoint(x: w/2, y: fieldCenterY + fieldHeight/2 - 50), direction: CGVector(dx: 0, dy: -1), movement: .turnLeft),
+                ShipConfig(name: "ship1", initialPosition: CGPoint(x: w/2 - fieldHeight/2 + 50, y: fieldCenterY), direction: CGVector(dx: 1, dy: 0), movement: .straight),
+                ShipConfig(name: "ship2", initialPosition: CGPoint(x: w/2, y: fieldCenterY - fieldHeight/2 + 50), direction: CGVector(dx: 0, dy: -1), movement: .straight),
+                ShipConfig(name: "ship3", initialPosition: CGPoint(x: w/2 + fieldHeight/2 - 80, y: fieldCenterY), direction: CGVector(dx: -1, dy: 0), movement: .turnLeft)
+            ]
+            
+        case 3:
+            roadConfigs = [
+                (CGPoint(x: w/2, y: fieldCenterY), CGSize(width: w, height: 100)),
+                (CGPoint(x: w/2, y: fieldCenterY), CGSize(width: 100, height: fieldHeight))
+            ]
+            shipConfigs = [
+                ShipConfig(name: "ship0", initialPosition: CGPoint(x: w/2, y: fieldCenterY + fieldHeight/2 - 50), direction: CGVector(dx: 0, dy: -1), movement: .straight),
+                ShipConfig(name: "ship1", initialPosition: CGPoint(x: w/2 - fieldHeight/2 + 50, y: fieldCenterY), direction: CGVector(dx: 1, dy: 0), movement: .turnRight),
+                ShipConfig(name: "ship2", initialPosition: CGPoint(x: w/2, y: fieldCenterY - fieldHeight/2 + 50), direction: CGVector(dx: 0, dy: -1), movement: .straight),
+                ShipConfig(name: "ship3", initialPosition: CGPoint(x: w/2 + fieldHeight/2 - 80, y: fieldCenterY), direction: CGVector(dx: -1, dy: 0), movement: .turnRight)
+            ]
+            
+        case 4:
+            roadConfigs = [
+                (CGPoint(x: w/2, y: fieldCenterY), CGSize(width: w, height: 100)),
+                (CGPoint(x: w/2, y: fieldCenterY), CGSize(width: 100, height: fieldHeight))
+            ]
+            shipConfigs = [
+                ShipConfig(name: "ship0", initialPosition: CGPoint(x: w/2, y: fieldCenterY + fieldHeight/2 - 50), direction: CGVector(dx: 0, dy: -1), movement: .straight),
+                ShipConfig(name: "ship1", initialPosition: CGPoint(x: w/2 - fieldHeight/2 + 50, y: fieldCenterY), direction: CGVector(dx: 1, dy: 0), movement: .turnLeft),
+                ShipConfig(name: "ship2", initialPosition: CGPoint(x: w/2, y: fieldCenterY - fieldHeight/2 + 50), direction: CGVector(dx: 0, dy: -1), movement: .straight),
+                ShipConfig(name: "ship3", initialPosition: CGPoint(x: w/2 + fieldHeight/2 - 80, y: fieldCenterY), direction: CGVector(dx: -1, dy: 0), movement: .turnLeft)
+            ]
+            
+        case 5:
+            roadConfigs = [
+                (CGPoint(x: w/2, y: fieldCenterY), CGSize(width: w, height: 100)),
+                (CGPoint(x: w/2, y: fieldCenterY), CGSize(width: 100, height: fieldHeight))
+            ]
+            shipConfigs = [
+                ShipConfig(name: "ship0", initialPosition: CGPoint(x: w/2, y: fieldCenterY + fieldHeight/2 - 50), direction: CGVector(dx: 0, dy: -1), movement: .turnLeft),
+                ShipConfig(name: "ship1", initialPosition: CGPoint(x: w/2 - fieldHeight/2 + 50, y: fieldCenterY), direction: CGVector(dx: 1, dy: 0), movement: .straight),
+                ShipConfig(name: "ship2", initialPosition: CGPoint(x: w/2, y: fieldCenterY - fieldHeight/2 + 50), direction: CGVector(dx: 0, dy: 1), movement: .turnLeft),
+                ShipConfig(name: "ship3", initialPosition: CGPoint(x: w/2 + fieldHeight/2 - 80, y: fieldCenterY), direction: CGVector(dx: 1, dy: 0), movement: .straight)
+            ]
+            
+        case 6:
+            roadConfigs = [
+                (CGPoint(x: w/2, y: fieldCenterY), CGSize(width: w, height: 100)),
+                (CGPoint(x: w/2, y: fieldCenterY), CGSize(width: 100, height: fieldHeight))
+            ]
+            shipConfigs = [
+                ShipConfig(name: "ship0", initialPosition: CGPoint(x: w/2, y: fieldCenterY + fieldHeight/2 - 50), direction: CGVector(dx: 0, dy: -1), movement: .straight),
+                ShipConfig(name: "ship1", initialPosition: CGPoint(x: w/2 - fieldHeight/2 + 50, y: fieldCenterY), direction: CGVector(dx: 1, dy: 0), movement: .turnRight),
+                ShipConfig(name: "ship2", initialPosition: CGPoint(x: w/2, y: fieldCenterY - fieldHeight/2 + 50), direction: CGVector(dx: 0, dy: -1), movement: .straight),
+                ShipConfig(name: "ship3", initialPosition: CGPoint(x: w/2 + fieldHeight/2 - 80, y: fieldCenterY), direction: CGVector(dx: -1, dy: 0), movement: .turnLeft)
+            ]
+            
+        case 7:
+            roadConfigs = [
+                (CGPoint(x: w/2, y: fieldCenterY), CGSize(width: w, height: 100)),
+                (CGPoint(x: w/2, y: fieldCenterY), CGSize(width: 100, height: fieldHeight))
+            ]
+            shipConfigs = [
+                ShipConfig(name: "ship0", initialPosition: CGPoint(x: w/2, y: fieldCenterY + fieldHeight/2 - 50), direction: CGVector(dx: 0, dy: -1), movement: .straight),
+                ShipConfig(name: "ship1", initialPosition: CGPoint(x: w/2 - fieldHeight/2 + 50, y: fieldCenterY), direction: CGVector(dx: 1, dy: 0), movement: .turnRight),
+                ShipConfig(name: "ship2", initialPosition: CGPoint(x: w/2, y: fieldCenterY - fieldHeight/2 + 50), direction: CGVector(dx: 0, dy: -1), movement: .straight),
+                ShipConfig(name: "ship3", initialPosition: CGPoint(x: w/2 + fieldHeight/2 - 80, y: fieldCenterY), direction: CGVector(dx: -1, dy: 0), movement: .turnLeft)
+            ]
+            
+        case 8:
+            roadConfigs = [
+                (CGPoint(x: w/2, y: fieldCenterY), CGSize(width: w, height: 100)),
+                (CGPoint(x: w/2, y: fieldCenterY), CGSize(width: 100, height: fieldHeight))
+            ]
+            shipConfigs = [
+                ShipConfig(name: "ship0", initialPosition: CGPoint(x: w/2, y: fieldCenterY + fieldHeight/2 - 50), direction: CGVector(dx: 0, dy: -1), movement: .straight),
+                ShipConfig(name: "ship1", initialPosition: CGPoint(x: w/2 - fieldHeight/2 + 50, y: fieldCenterY), direction: CGVector(dx: 1, dy: 0), movement: .turnRight),
+                ShipConfig(name: "ship2", initialPosition: CGPoint(x: w/2, y: fieldCenterY - fieldHeight/2 + 50), direction: CGVector(dx: 0, dy: -1), movement: .straight),
+                ShipConfig(name: "ship3", initialPosition: CGPoint(x: w/2 + fieldHeight/2 - 80, y: fieldCenterY), direction: CGVector(dx: -1, dy: 0), movement: .turnRight)
+            ]
+            
+        case 9:
+            roadConfigs = [
+                (CGPoint(x: w/2, y: fieldCenterY), CGSize(width: w, height: 100)),
+                (CGPoint(x: w/2, y: fieldCenterY), CGSize(width: 100, height: fieldHeight))
+            ]
+            shipConfigs = [
+                ShipConfig(name: "ship0", initialPosition: CGPoint(x: w/2, y: fieldCenterY + fieldHeight/2 - 50), direction: CGVector(dx: 0, dy: 1), movement: .straight),
+                ShipConfig(name: "ship1", initialPosition: CGPoint(x: w/2 - fieldHeight/2 + 50, y: fieldCenterY), direction: CGVector(dx: 1, dy: 0), movement: .turnLeft),
+                ShipConfig(name: "ship2", initialPosition: CGPoint(x: w/2, y: fieldCenterY - fieldHeight/2 + 50), direction: CGVector(dx: 0, dy: 1), movement: .turnRight),
+                ShipConfig(name: "ship3", initialPosition: CGPoint(x: w/2 + fieldHeight/2 - 80, y: fieldCenterY), direction: CGVector(dx: -1, dy: 0), movement: .straight)
+            ]
         default:
             break
         }
-
+        
         for config in roadConfigs {
-            let road = SKSpriteNode(color: .darkGray, size: config.size)
+            let road = SKSpriteNode(color: .clear, size: config.size)
             road.position = config.position
             addChild(road)
         }
-
+        guard let item = shopVM.currentPersonItem else { return }
         for shipConfig in shipConfigs {
-                   let ship = SKSpriteNode(imageNamed: "shipSG")
-                   ship.size = CGSize(width: 60, height: 60)
-                   ship.position = shipConfig.initialPosition
-                   ship.name = shipConfig.name
-                   ship.zRotation = atan2(shipConfig.direction.dy, shipConfig.direction.dx)
-                   ship.userData = [
-                       "initialPosition": NSValue(cgPoint: shipConfig.initialPosition),
-                       "direction": NSValue(cgVector: shipConfig.direction),
-                       "movementType": shipConfig.movement.rawValue
-                   ]
-                   ship.physicsBody = SKPhysicsBody(circleOfRadius: 20)
-                   ship.physicsBody?.categoryBitMask = 0x1 << 0
-                   ship.physicsBody?.contactTestBitMask = 0x1 << 0
-                   ship.physicsBody?.collisionBitMask = 0
-                   ship.physicsBody?.affectedByGravity = false
-                   addChild(ship)
-
+            let ship = SKSpriteNode(imageNamed: item.image)
+            ship.size = CGSize(width: 60, height: 60)
+            ship.position = shipConfig.initialPosition
+            ship.name = shipConfig.name
+            ship.zRotation = atan2(shipConfig.direction.dy, shipConfig.direction.dx)
+            ship.userData = [
+                "initialPosition": NSValue(cgPoint: shipConfig.initialPosition),
+                "direction": NSValue(cgVector: shipConfig.direction),
+                "movementType": shipConfig.movement.rawValue
+            ]
+            ship.physicsBody = SKPhysicsBody(circleOfRadius: 20)
+            ship.physicsBody?.categoryBitMask = 0x1 << 0
+            ship.physicsBody?.contactTestBitMask = 0x1 << 0
+            ship.physicsBody?.collisionBitMask = 0
+            ship.physicsBody?.affectedByGravity = false
+            addChild(ship)
+            
             let arrowTextureName: String
             switch shipConfig.movement {
             case .straight:
@@ -96,21 +200,21 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             }
             
             let arrow = SKSpriteNode(imageNamed: arrowTextureName)
-                   arrow.size = CGSize(width: 20, height: 40)
+            arrow.size = CGSize(width: 20, height: 40)
             arrow.position = CGPoint(x: 20, y: 0)
-                   arrow.zRotation = -(.pi/2)
-                   ship.addChild(arrow)
-                   shipArrows[ship] = arrow
-
-                   let bigArrow = SKSpriteNode(imageNamed: "arrow")
-                   bigArrow.size = CGSize(width: 60, height: 30)
-                   bigArrow.position = CGPoint(x: shipConfig.initialPosition.x, y: shipConfig.initialPosition.y + 50)
-                   bigArrow.zRotation = ship.zRotation - .pi/2
-                   //addChild(bigArrow)
-                   bigArrows[ship] = bigArrow
-               }
+            arrow.zRotation = -(.pi/2)
+            ship.addChild(arrow)
+            shipArrows[ship] = arrow
+            
+            let bigArrow = SKSpriteNode(imageNamed: "arrow")
+            bigArrow.size = CGSize(width: 60, height: 30)
+            bigArrow.position = CGPoint(x: shipConfig.initialPosition.x, y: shipConfig.initialPosition.y + 50)
+            bigArrow.zRotation = ship.zRotation - .pi/2
+            //addChild(bigArrow)
+            bigArrows[ship] = bigArrow
+        }
     }
-
+    
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         guard let touch = touches.first else { return }
         let location = touch.location(in: self)
@@ -122,60 +226,52 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             }
         }
     }
-
+    
     private func startMovement(for ship: SKSpriteNode) {
         guard ship.action(forKey: "moving") == nil else { return }
         lastTappedShip = ship
-
-        if let arrow = shipArrows[ship] {
-            arrow.removeFromParent()
-        }
-        if let bigArrow = bigArrows[ship] {
-            bigArrow.removeFromParent()
-        }
-
-        guard
-            let dirValue = ship.userData?["direction"] as? NSValue,
-            let typeValue = ship.userData?["movementType"] as? NSNumber
-        else { return }
-
-        let dir = dirValue.cgVectorValue
-        let movementType = MovementType(rawValue: typeValue.intValue) ?? .straight
-        let maxDist = max(size.width, size.height)
-        let fullDuration: TimeInterval = 3.0
-        let finish = SKAction.run { [weak ship] in
-            ship?.removeAllActions()
-            ship?.removeFromParent()
-        }
-
-        switch movementType {
-        case .straight:
-            let dest = CGPoint(x: ship.position.x + dir.dx * maxDist,
-                               y: ship.position.y + dir.dy * maxDist)
-            let move = SKAction.move(to: dest, duration: fullDuration)
-            ship.run(.sequence([move, finish]), withKey: "moving")
-
-        case .uTurn:
-            let dest = CGPoint(x: ship.position.x - dir.dx * maxDist,
-                               y: ship.position.y - dir.dy * maxDist)
-            let move = SKAction.move(to: dest, duration: fullDuration)
-            ship.run(.sequence([move, finish]), withKey: "moving")
-
+        shipArrows[ship]?.removeFromParent()
+        bigArrows[ship]?.removeFromParent()
+        
+        guard let dVal = ship.userData?["direction"] as? NSValue,
+              let tVal = ship.userData?["movementType"] as? NSNumber else { return }
+        let dir = dVal.cgVectorValue
+        let type = MovementType(rawValue: tVal.intValue) ?? .straight
+        let off: CGFloat = 2000
+        var actions: [SKAction] = []
+        
+        switch type {
+        case .straight, .uTurn:
+            let rev = (type == .uTurn)
+            let dx = rev ? -dir.dx : dir.dx
+            let dy = rev ? -dir.dy : dir.dy
+            let dest = CGPoint(x: ship.position.x + dx * off,
+                               y: ship.position.y + dy * off)
+            let move = SKAction.move(to: dest, duration: 3)
+            let remove = SKAction.run { [weak self, weak ship] in
+                ship?.removeFromParent()
+                self?.checkVictory()
+            }
+            actions = [move, remove]
         case .turnLeft, .turnRight:
             let center = CGPoint(x: size.width/2, y: size.height/2)
-            let halfDuration = fullDuration / 2
-            let move1 = SKAction.move(to: center, duration: halfDuration)
-            let angle: CGFloat = (movementType == .turnLeft) ? .pi/2 : -.pi/2
-            let rotate = SKAction.rotate(byAngle: angle, duration: 0)
-            let newDir = CGVector(dx: dir.dx * cos(angle) - dir.dy * sin(angle),
-                                  dy: dir.dx * sin(angle) + dir.dy * cos(angle))
-            let dest2 = CGPoint(x: center.x + newDir.dx * maxDist,
-                                y: center.y + newDir.dy * maxDist)
-            let move2 = SKAction.move(to: dest2, duration: halfDuration)
-            ship.run(.sequence([move1, rotate, move2, finish]), withKey: "moving")
+            let first = SKAction.move(to: center, duration: 1.5)
+            let ang: CGFloat = (type == .turnLeft) ? .pi/2 : -.pi/2
+            let rot = SKAction.rotate(byAngle: ang, duration: 0)
+            let nd = CGVector(dx: dir.dx * cos(ang) - dir.dy * sin(ang),
+                              dy: dir.dx * sin(ang) + dir.dy * cos(ang))
+            let dest2 = CGPoint(x: center.x + nd.dx * off,
+                                y: center.y + nd.dy * off)
+            let second = SKAction.move(to: dest2, duration: 1.5)
+            let remove = SKAction.run { [weak self, weak ship] in
+                ship?.removeFromParent()
+                self?.checkVictory()
+            }
+            actions = [first, rot, second, remove]
         }
+        ship.run(SKAction.sequence(actions), withKey: "moving")
     }
-
+    
     func didBegin(_ contact: SKPhysicsContact) {
         guard let ship = lastTappedShip else { return }
         if contact.bodyA.node == ship || contact.bodyB.node == ship {
@@ -187,4 +283,30 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             lastTappedShip = nil
         }
     }
+    
+    // Проверка победы: если нет кораблей, показываем победу
+        private func checkVictory() {
+            self.scoreHandle?()
+            let remaining = children.reduce(0) { count, node in
+                guard let body = node.physicsBody else { return count }
+                return body.categoryBitMask == (0x1 << 0) ? count + 1 : count
+            }
+            if remaining == 0 {
+                showVictory()
+            }
+        }
+
+        private func showVictory() {
+            winHandle?()
+        }
+    
+    func restartLevel() {
+        removeAllChildren()
+        shipArrows.removeAll()
+        setupLevel(levelIndex ?? 0)
+    }
+}
+
+#Preview {
+    GameView(shopVM: StoreViewModelSG(), achievementVM: AchievementsViewModelSG(), level: 0)
 }
