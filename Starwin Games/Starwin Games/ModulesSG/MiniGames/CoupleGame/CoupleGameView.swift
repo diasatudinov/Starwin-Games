@@ -6,7 +6,6 @@ struct CoupleGameView: View {
 
     @StateObject var user = GEUser.shared
     @State private var audioPlayer: AVAudioPlayer?
-    @ObservedObject var settingsVM: SettingsViewModelSG
     
     @State private var cards: [Card] = []
     @State private var selectedCards: [Card] = []
@@ -63,9 +62,7 @@ struct CoupleGameView: View {
                             CardView(card: card)
                                 .onTapGesture {
                                     flipCard(card)
-                                    if settingsVM.soundEnabled {
-                                        playSound(named: "flipcard")
-                                    }
+                                   
                                 }
                                 .opacity(card.isMatched ? 0.5 : 1.0)
                         }
@@ -245,18 +242,8 @@ struct CoupleGameView: View {
         selectedCards.removeAll()
     }
     
-    func playSound(named soundName: String) {
-        if let url = Bundle.main.url(forResource: soundName, withExtension: "mp3") {
-            do {
-                audioPlayer = try AVAudioPlayer(contentsOf: url)
-                audioPlayer?.play()
-            } catch {
-                print("Error playing sound: \(error.localizedDescription)")
-            }
-        }
-    }
 }
 
 #Preview {
-    CoupleGameView(settingsVM: SettingsViewModelSG())
+    CoupleGameView()
 }

@@ -12,11 +12,16 @@ import SpriteKit
 
 struct LabirintViewContainer: UIViewRepresentable {
     @StateObject var user = GEUser.shared
-    var scene: GameScene
+    var scene: MazeScene
+    @Binding var isWin: Bool
     func makeUIView(context: Context) -> SKView {
         let skView = SKView(frame: UIScreen.main.bounds)
         skView.backgroundColor = .clear
         scene.scaleMode = .resizeFill
+        scene.isWinHandler = {
+            isWin = true
+            user.updateUserMoney(for: 100)
+        }
         skView.presentScene(scene)
         
         return skView

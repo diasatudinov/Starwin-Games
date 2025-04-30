@@ -1,3 +1,11 @@
+//
+//  CardView.swift
+//  Starwin Games
+//
+//  Created by Dias Atudinov on 30.04.2025.
+//
+
+
 import SwiftUI
 
 struct CardView: View {
@@ -9,17 +17,17 @@ struct CardView: View {
                 Image(card.type)
                     .resizable()
                     .scaledToFit()
-                    .frame(height: DeviceInfo.shared.deviceType == .pad ? 120:60)
+                    .frame(height: SGDeviceManager.shared.deviceType == .pad ? 240:120)
             } else {
-                Image(.cardBack)
+                Image(.cardBackSG)
                     .resizable()
                     .scaledToFit()
-                    .frame(height: DeviceInfo.shared.deviceType == .pad ? 120:60)
+                    .frame(height: SGDeviceManager.shared.deviceType == .pad ? 240:120)
             }
         }
     }
 }
 
 #Preview {
-    CardView(card: Card(type: "cardFace1"))
+    CardView(card: Card(type: "cardFace1SG"))
 }
