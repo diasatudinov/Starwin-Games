@@ -3,59 +3,140 @@
 import SwiftUI
 
 struct MemorizationViewSG: View {
-    // Names of the images in your Assets catalog
-    let cardImages = ["card1", "card2", "card3", "card4", "card5", "card6", "card7", "card8"]
-    let sequenceLength = 3
+    @StateObject var user = GEUser.shared
+    @Environment(\.presentationMode) var presentationMode
 
+    // Names of the images in your Assets catalog
+    let cardImages = ["card1SG", "card2SG", "card3SG", "card4SG", "card5SG", "card6SG", "card7SG", "card8SG"]
+    let sequenceLength = 3
+    
     // Game state
     @State private var sequence: [Int] = []
-    @State private var currentHighlightIndex: Int? = nil
+    @State private var currentStep: Int? = nil
     @State private var gamePhase: GamePhase = .showing
     @State private var userInputIndex = 0
     @State private var feedback: String? = nil
-
+    
     enum GamePhase {
-        case showing  // Showing the sequence
-        case userTurn // Waiting for user input
-        case finished // Game over (win/lose)
+        case showing      // Showing sequence one by one full-screen
+        case userTurn     // User repeats sequence
+        case finished     // Game over
     }
-
+    
     var body: some View {
+        ZStack {
         VStack {
-            // Header text
-            Text(feedbackMessage)
-                .font(.title2)
-                .padding()
-
-            // Grid of cards
-            LazyVGrid(columns: Array(repeating: GridItem(.flexible(), spacing: 12), count: 4), spacing: 12) {
-                ForEach(0..<cardImages.count, id: \.self) { index in
-                    CardView(
-                        imageName: cardImages[index],
-                        isHighlighted: index == currentHighlightIndex
-                    )
-                    .onTapGesture {
-                        handleTap(on: index)
+            HStack {
+                VStack {
+                    HStack(alignment: .top) {
+                        Button {
+                            presentationMode.wrappedValue.dismiss()
+                            
+                        } label: {
+                            Image(.homeIconSG)
+                                .resizable()
+                                .scaledToFit()
+                                .frame(height: SGDeviceManager.shared.deviceType == .pad ? 150:75)
+                        }
+                        Spacer()
+                    }.padding([.horizontal, .top])
+                    
+                    Image(.memorizationTextSG)
+                        .resizable()
+                        .scaledToFit()
+                        .frame(height: 100)
+                }
+            }
+            
+            Spacer()
+            
+            if gamePhase == .showing {
+                // Full-screen reveal of each card in sequence
+                if let idx = currentStep {
+                    MemorizationCardView(imageName: cardImages[idx])
+                        .frame(height: 300)
+                        .padding()
+                        .transition(.opacity)
+                }
+            } else {
+                // Grid for user interaction
+                LazyVGrid(columns: Array(repeating: GridItem(.flexible(), spacing: 12), count: 4), spacing: 12) {
+                    ForEach(0..<cardImages.count, id: \.self) { index in
+                        MemorizationCardView(imageName: cardImages[index])
+                            .onTapGesture {
+                                handleTap(on: index)
+                            }
                     }
                 }
+                .padding()
             }
-            .padding()
-
-            // Play Again button
-            if gamePhase == .finished {
-                Button("Play Again") {
-                    startGame()
-                }
-                .padding(.top)
-            }
+            
+            Spacer()
+            
+            
         }
+            
+            if gamePhase == .finished {
+                
+                if userInputIndex >= sequenceLength {
+                    ZStack {
+                        Image(.mazeViewBg)
+                            .resizable()
+                        VStack(spacing: -40) {
+                            Image(.winTextSG)
+                                .resizable()
+                                .scaledToFit()
+                                .frame(height: 400)
+                            
+                            Button {
+                                startGame()
+                            } label: {
+                                Image(.nextButtonSG)
+                                    .resizable()
+                                    .scaledToFit()
+                                    .frame(height: 100)
+                            }
+                        }
+                    }
+                } else {
+                    ZStack {
+                        Image(.mazeViewBg)
+                            .resizable()
+                        VStack(spacing: -40) {
+                            Image(.loseTextSG)
+                                .resizable()
+                                .scaledToFit()
+                                .frame(height: 180)
+                            
+                            Button {
+                                startGame()
+                            } label: {
+                                Image(.tryAgainIconSG)
+                                    .resizable()
+                                    .scaledToFit()
+                                    .frame(height: 150)
+                            }
+                        }
+                    }
+                }
+                
+            }
+    }
+        .background(
+            ZStack {
+                Image(.mazeViewBg)
+                    .resizable()
+                    .edgesIgnoringSafeArea(.all)
+                    .scaledToFill()
+            }
+        )
         .onAppear {
             startGame()
         }
+        .animation(.easeInOut, value: currentStep)
     }
-
-    // Computed header message
-    private var feedbackMessage: String {
+    
+    private var headerText: String {
         switch gamePhase {
         case .showing:
             return "Watch the sequence..."
@@ -65,65 +146,58 @@ struct MemorizationViewSG: View {
             return feedback ?? ""
         }
     }
-
-    // Initialize and begin showing a new sequence
+    
     private func startGame() {
         sequence = Array(0..<cardImages.count).shuffled().prefix(sequenceLength).map { $0 }
         userInputIndex = 0
         feedback = nil
         gamePhase = .showing
-
+        currentStep = nil
+        
         Task {
-            await showSequence()
+            await revealSequence()
         }
     }
-
-    // Handle taps only during user phase
+    
+    @MainActor
+    private func revealSequence() async {
+        for idx in sequence {
+            currentStep = idx
+            try? await Task.sleep(nanoseconds: 800_000_000)
+            currentStep = nil
+            try? await Task.sleep(nanoseconds: 300_000_000)
+        }
+        gamePhase = .userTurn
+    }
+    
     private func handleTap(on index: Int) {
         guard gamePhase == .userTurn else { return }
-
         if index == sequence[userInputIndex] {
             userInputIndex += 1
             if userInputIndex >= sequenceLength {
                 feedback = "Correct! You win!"
+                user.updateUserMoney(for: 100)
                 gamePhase = .finished
+                
             }
         } else {
             feedback = "Wrong! Try again."
             gamePhase = .finished
         }
     }
-
-    // Asynchronously flash the sequence
-    @MainActor
-    private func showSequence() async {
-        for idx in sequence {
-            currentHighlightIndex = idx
-            try? await Task.sleep(nanoseconds: 800_000_000) // 0.8s
-            currentHighlightIndex = nil
-            try? await Task.sleep(nanoseconds: 300_000_000) // 0.3s
-        }
-        gamePhase = .userTurn
-    }
 }
 
-// Single card view with optional highlight
-struct CardView: View {
+struct MemorizationCardView: View {
     let imageName: String
-    let isHighlighted: Bool
-
     var body: some View {
         Image(imageName)
             .resizable()
-            .aspectRatio(contentMode: .fit)
-            .overlay(
-                RoundedRectangle(cornerRadius: 8)
-                    .stroke(isHighlighted ? Color.blue : Color.clear, lineWidth: 4)
-            )
+            .scaledToFit()
             .cornerRadius(8)
+            .shadow(radius: 4)
     }
 }
 
 #Preview {
-    LabirintGameView()
+    MemorizationViewSG()
 }

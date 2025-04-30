@@ -15,18 +15,18 @@ class StoreViewModelSG: ObservableObject {
         Item(name: "bg5", image: "gameBg5SG", icon: "backIcon5SG", section: .backgrounds, price: 100),
         
         
-        Item(name: "skin1", image: "gameSkin1SG", icon: "iconSkin1SG", section: .skin, price: 100),
-        Item(name: "skin2", image: "gameSkin2SG", icon: "iconSkin2SG", section: .skin, price: 100),
-        Item(name: "skin3", image: "gameSkin3SG", icon: "iconSkin3SG", section: .skin, price: 100),
-        Item(name: "skin4", image: "gameSkin4SG", icon: "iconSkin4SG", section: .skin, price: 100),
-        Item(name: "skin5", image: "gameSkin5SG", icon: "iconSkin5SG", section: .skin, price: 100),
-        Item(name: "skin6", image: "gameSkin6SG", icon: "iconSkin6SG", section: .skin, price: 100),
+        Item(name: "skin1", image: "imageSkin1SG", icon: "iconSkin1SG", section: .skin, price: 100),
+        Item(name: "skin2", image: "imageSkin2SG", icon: "iconSkin2SG", section: .skin, price: 100),
+        Item(name: "skin3", image: "imageSkin3SG", icon: "iconSkin3SG", section: .skin, price: 100),
+        Item(name: "skin4", image: "imageSkin4SG", icon: "iconSkin4SG", section: .skin, price: 100),
+        Item(name: "skin5", image: "imageSkin5SG", icon: "iconSkin5SG", section: .skin, price: 100),
+        Item(name: "skin6", image: "imageSkin6SG", icon: "iconSkin6SG", section: .skin, price: 100),
          
     ]
     
     @Published var boughtItems: [Item] = [
-        Item(name: "bg1", image: "gameBg1AO", icon: "backIcon1SG", section: .backgrounds, price: 100),
-        Item(name: "skin1", image: "gameSkin1SG", icon: "iconSkin1SG", section: .skin, price: 100),
+        Item(name: "bg1", image: "gameBg1SG", icon: "backIcon1SG", section: .backgrounds, price: 100),
+        Item(name: "skin1", image: "imageSkin1SG", icon: "iconSkin1SG", section: .skin, price: 100),
     ] {
         didSet {
             saveBoughtItem()
@@ -51,9 +51,9 @@ class StoreViewModelSG: ObservableObject {
         loadBoughtItem()
     }
     
-    private let userDefaultsBgKey = "BgKey"
-    private let userDefaultsPersonKey = "BirdKey"
-    private let userDefaultsBoughtKey = "boughtItems"
+    private let userDefaultsBgKey = "BgKeySG"
+    private let userDefaultsPersonKey = "BirdKeySG"
+    private let userDefaultsBoughtKey = "boughtItemsSG"
 
     
     func saveCurrentBg() {
@@ -87,7 +87,7 @@ class StoreViewModelSG: ObservableObject {
            let loadedItem = try? JSONDecoder().decode(Item.self, from: savedData) {
             currentPersonItem = loadedItem
         } else {
-            currentPersonItem = shopTeamItems[3]
+            currentPersonItem = shopTeamItems[8]
             print("No saved data found")
         }
     }

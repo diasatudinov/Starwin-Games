@@ -121,11 +121,103 @@ struct ShopViewSG: View {
                     .scaledToFit()
             }
             
-            Image(item.icon)
-                .resizable()
-                .scaledToFit()
+            VStack {
+                Image(item.icon)
+                    .resizable()
+                    .scaledToFit()
                 
-           
+                Button {
+                    if item.section == .skin {
+                        if viewModel.boughtItems.contains(where: { $0.name == item.name }) {
+                            viewModel.currentPersonItem = item
+                        } else {
+                            if !viewModel.boughtItems.contains(where: { $0.name == item.name }) {
+                                
+                                if user.money >= item.price {
+                                    user.minusUserMoney(for: item.price)
+                                    viewModel.boughtItems.append(item)
+                                }
+                            }
+                        }
+                    } else {
+                        if viewModel.boughtItems.contains(where: { $0.name == item.name }) {
+                            viewModel.currentBgItem = item
+                        } else {
+                            if !viewModel.boughtItems.contains(where: { $0.name == item.name }) {
+                                
+                                if user.money >= item.price {
+                                    user.minusUserMoney(for: item.price)
+                                    viewModel.boughtItems.append(item)
+                                }
+                            }
+                        }
+                    }
+                } label: {
+                    if item.section == .skin {
+                    if viewModel.boughtItems.contains(where: { $0.name == item.name }) {
+                        VStack {
+                            Spacer()
+                            ZStack {
+                                Image(.boughtViewSG)
+                                    .resizable()
+                                    .scaledToFit()
+                                    .frame(height: SGDeviceManager.shared.deviceType == .pad ? 100:50)
+                                if let currentItem = viewModel.currentPersonItem, currentItem.name == item.name {
+                                    Image(.selectedViewSG)
+                                        .resizable()
+                                        .scaledToFit()
+                                        .frame(height: SGDeviceManager.shared.deviceType == .pad ? 100:50)
+                                }
+                                
+                            }
+                        }
+                    } else {
+                        VStack {
+                            Spacer()
+                            ZStack {
+                                Image(.priceViewSG)
+                                    .resizable()
+                                    .scaledToFit()
+                                    .frame(height: SGDeviceManager.shared.deviceType == .pad ? 100:50)
+                                
+                                
+                            }
+                        }
+                    }
+                    } else {
+                        if viewModel.boughtItems.contains(where: { $0.name == item.name }) {
+                            VStack {
+                                Spacer()
+                                ZStack {
+                                    Image(.boughtViewSG)
+                                        .resizable()
+                                        .scaledToFit()
+                                        .frame(height: SGDeviceManager.shared.deviceType == .pad ? 100:50)
+                                    if let currentItem = viewModel.currentBgItem, currentItem.name == item.name {
+                                        Image(.selectedViewSG)
+                                            .resizable()
+                                            .scaledToFit()
+                                            .frame(height: SGDeviceManager.shared.deviceType == .pad ? 100:50)
+                                    }
+                                    
+                                }
+                            }
+                        } else {
+                            VStack {
+                                Spacer()
+                                ZStack {
+                                    Image(.priceViewSG)
+                                        .resizable()
+                                        .scaledToFit()
+                                        .frame(height: SGDeviceManager.shared.deviceType == .pad ? 100:50)
+                                    
+                                    
+                                }
+                            }
+                        }
+                    }
+                }
+            }
             
         }.frame(height: SGDeviceManager.shared.deviceType == .pad ? 378:189)
         
