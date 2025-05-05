@@ -93,7 +93,7 @@ struct SettingsViewSG: View {
                         Image(.rateUsIconSG)
                             .resizable()
                             .scaledToFit()
-                            .frame(height: SGDeviceManager.shared.deviceType == .pad ? 50:120)
+                            .frame(height: SGDeviceManager.shared.deviceType == .pad ? 240:120)
                     }
                 }.offset(x: 0, y: 40)
                 

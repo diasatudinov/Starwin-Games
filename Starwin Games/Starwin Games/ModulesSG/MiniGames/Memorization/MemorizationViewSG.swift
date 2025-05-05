@@ -3,9 +3,9 @@
 import SwiftUI
 
 struct MemorizationViewSG: View {
-    @StateObject var user = GEUser.shared
+    @StateObject var user = SGUser.shared
     @Environment(\.presentationMode) var presentationMode
-
+    
     // Names of the images in your Assets catalog
     let cardImages = ["card1SG", "card2SG", "card3SG", "card4SG", "card5SG", "card6SG", "card7SG", "card8SG"]
     let sequenceLength = 3
@@ -25,56 +25,56 @@ struct MemorizationViewSG: View {
     
     var body: some View {
         ZStack {
-        VStack {
-            HStack {
-                VStack {
-                    HStack(alignment: .top) {
-                        Button {
-                            presentationMode.wrappedValue.dismiss()
-                            
-                        } label: {
-                            Image(.homeIconSG)
-                                .resizable()
-                                .scaledToFit()
-                                .frame(height: SGDeviceManager.shared.deviceType == .pad ? 150:75)
-                        }
-                        Spacer()
-                    }.padding([.horizontal, .top])
-                    
-                    Image(.memorizationTextSG)
-                        .resizable()
-                        .scaledToFit()
-                        .frame(height: 100)
-                }
-            }
-            
-            Spacer()
-            
-            if gamePhase == .showing {
-                // Full-screen reveal of each card in sequence
-                if let idx = currentStep {
-                    MemorizationCardView(imageName: cardImages[idx])
-                        .frame(height: 300)
-                        .padding()
-                        .transition(.opacity)
-                }
-            } else {
-                // Grid for user interaction
-                LazyVGrid(columns: Array(repeating: GridItem(.flexible(), spacing: 12), count: 4), spacing: 12) {
-                    ForEach(0..<cardImages.count, id: \.self) { index in
-                        MemorizationCardView(imageName: cardImages[index])
-                            .onTapGesture {
-                                handleTap(on: index)
+            VStack {
+                HStack {
+                    VStack {
+                        HStack(alignment: .top) {
+                            Button {
+                                presentationMode.wrappedValue.dismiss()
+                                
+                            } label: {
+                                Image(.homeIconSG)
+                                    .resizable()
+                                    .scaledToFit()
+                                    .frame(height: SGDeviceManager.shared.deviceType == .pad ? 150:75)
                             }
+                            Spacer()
+                        }.padding([.horizontal, .top])
+                        
+                        Image(.memorizationTextSG)
+                            .resizable()
+                            .scaledToFit()
+                            .frame(height: SGDeviceManager.shared.deviceType == .pad ? 200:100)
                     }
                 }
-                .padding()
+                
+                Spacer()
+                
+                if gamePhase == .showing {
+                    // Full-screen reveal of each card in sequence
+                    if let idx = currentStep {
+                        MemorizationCardView(imageName: cardImages[idx])
+                            .frame(height: SGDeviceManager.shared.deviceType == .pad ? 600:300)
+                            .padding()
+                            .transition(.opacity)
+                    }
+                } else {
+                    // Grid for user interaction
+                    LazyVGrid(columns: Array(repeating: GridItem(.flexible(), spacing: 12), count: 4), spacing: 12) {
+                        ForEach(0..<cardImages.count, id: \.self) { index in
+                            MemorizationCardView(imageName: cardImages[index])
+                                .onTapGesture {
+                                    handleTap(on: index)
+                                }
+                        }
+                    }
+                    .padding()
+                }
+                
+                Spacer()
+                
+                
             }
-            
-            Spacer()
-            
-            
-        }
             
             if gamePhase == .finished {
                 
@@ -82,11 +82,11 @@ struct MemorizationViewSG: View {
                     ZStack {
                         Image(.mazeViewBg)
                             .resizable()
-                        VStack(spacing: -40) {
+                        VStack(spacing: SGDeviceManager.shared.deviceType == .pad ? -80:-40) {
                             Image(.winTextSG)
                                 .resizable()
                                 .scaledToFit()
-                                .frame(height: 400)
+                                .frame(height: SGDeviceManager.shared.deviceType == .pad ? 800:400)
                             
                             Button {
                                 startGame()
@@ -94,7 +94,7 @@ struct MemorizationViewSG: View {
                                 Image(.nextButtonSG)
                                     .resizable()
                                     .scaledToFit()
-                                    .frame(height: 100)
+                                    .frame(height: SGDeviceManager.shared.deviceType == .pad ? 200:100)
                             }
                         }
                     }
@@ -102,11 +102,11 @@ struct MemorizationViewSG: View {
                     ZStack {
                         Image(.mazeViewBg)
                             .resizable()
-                        VStack(spacing: -40) {
+                        VStack(spacing: SGDeviceManager.shared.deviceType == .pad ? -80:-40) {
                             Image(.loseTextSG)
                                 .resizable()
                                 .scaledToFit()
-                                .frame(height: 180)
+                                .frame(height: SGDeviceManager.shared.deviceType == .pad ? 360:180)
                             
                             Button {
                                 startGame()
@@ -114,14 +114,14 @@ struct MemorizationViewSG: View {
                                 Image(.tryAgainIconSG)
                                     .resizable()
                                     .scaledToFit()
-                                    .frame(height: 150)
+                                    .frame(height: SGDeviceManager.shared.deviceType == .pad ? 300:150)
                             }
                         }
                     }
                 }
                 
             }
-    }
+        }
         .background(
             ZStack {
                 Image(.mazeViewBg)

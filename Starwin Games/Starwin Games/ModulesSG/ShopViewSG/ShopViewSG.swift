@@ -3,7 +3,7 @@ import SwiftUI
 
 struct ShopViewSG: View {
     @Environment(\.presentationMode) var presentationMode
-    @StateObject var user = GEUser.shared
+    @StateObject var user = SGUser.shared
     @State var section: StoreSection = .skin
     @ObservedObject var viewModel: StoreViewModelSG
     @State var skinIndex: Int = 0
