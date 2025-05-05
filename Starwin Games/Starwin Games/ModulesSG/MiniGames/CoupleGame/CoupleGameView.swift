@@ -4,7 +4,7 @@ import AVFoundation
 struct CoupleGameView: View {
     @Environment(\.presentationMode) var presentationMode
 
-    @StateObject var user = GEUser.shared
+    @StateObject var user = SGUser.shared
     @State private var audioPlayer: AVAudioPlayer?
     
     @State private var cards: [Card] = []
@@ -39,7 +39,7 @@ struct CoupleGameView: View {
                         Spacer()
                     }
                     
-                    VStack(spacing: -20) {
+                    VStack(spacing: SGDeviceManager.shared.deviceType == .pad ? -40:-20) {
                         Image(.findCoupleText)
                             .resizable()
                             .scaledToFit()
@@ -49,10 +49,10 @@ struct CoupleGameView: View {
                             Image(.coupleTimerBg)
                                 .resizable()
                                 .scaledToFit()
-                                .frame(height: SGDeviceManager.shared.deviceType == .pad ? 240:70)
+                                .frame(height: SGDeviceManager.shared.deviceType == .pad ? 140:70)
                             
                             Text("\(timeLeft)")
-                                .font(.system(size: 20, weight: .bold))
+                                .font(.system(size: SGDeviceManager.shared.deviceType == .pad ? 40:20, weight: .bold))
                                 .foregroundStyle(.yellow)
                         }
                     }
@@ -68,7 +68,7 @@ struct CoupleGameView: View {
                         }
                         
                     }
-                    .frame(width: SGDeviceManager.shared.deviceType == .pad ? 700:350)
+                    .frame(width: SGDeviceManager.shared.deviceType == .pad ? 500:350)
                    
                 }
                 .onAppear {
@@ -84,7 +84,7 @@ struct CoupleGameView: View {
                             Image(.winTextSG)
                                 .resizable()
                                 .scaledToFit()
-                                .frame(height: 400)
+                                .frame(height: SGDeviceManager.shared.deviceType == .pad ? 800:400)
                             
                             Button {
                                 setupGame()
@@ -92,7 +92,7 @@ struct CoupleGameView: View {
                                 Image(.nextButtonSG)
                                     .resizable()
                                     .scaledToFit()
-                                    .frame(height: 100)
+                                    .frame(height: SGDeviceManager.shared.deviceType == .pad ? 200:100)
                             }
                         }
                     }
@@ -100,11 +100,11 @@ struct CoupleGameView: View {
                     ZStack {
                         Image(.coupleGameBgSG)
                             .resizable()
-                        VStack(spacing: -40) {
+                        VStack(spacing: SGDeviceManager.shared.deviceType == .pad ? -80:-40) {
                             Image(.loseTextSG)
                                 .resizable()
                                 .scaledToFit()
-                                .frame(height: 180)
+                                .frame(height: SGDeviceManager.shared.deviceType == .pad ? 360:180)
                             
                             Button {
                                 setupGame()
@@ -112,7 +112,7 @@ struct CoupleGameView: View {
                                 Image(.tryAgainIconSG)
                                     .resizable()
                                     .scaledToFit()
-                                    .frame(height: 150)
+                                    .frame(height: SGDeviceManager.shared.deviceType == .pad ? 300:150)
                             }
                         }
                     }
