@@ -86,6 +86,7 @@ struct MenuViewSG: View {
                 }
             }.padding()
                 .ignoresSafeArea(edges: .bottom)
+            
         }
         .background(
             ZStack {

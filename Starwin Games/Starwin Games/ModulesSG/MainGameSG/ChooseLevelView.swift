@@ -34,12 +34,12 @@ struct ChooseLevelView: View {
                             Image(.planetLevel1)
                                 .resizable()
                                 .scaledToFit()
-                                .frame(width: 100,height: 100)
+                                .frame(width: SGDeviceManager.shared.deviceType == .pad ? 200:100,height: SGDeviceManager.shared.deviceType == .pad ? 200:100)
                             
                             Text("\(index + 1)")
-                                .font(.system(size: 40, weight: .bold))
+                                .font(.system(size: SGDeviceManager.shared.deviceType == .pad ? 80:40, weight: .bold))
                                 .foregroundStyle(.black)
-                        }.offset(x: CGFloat(Int.random(in: Range(-65...65))))
+                        }.offset(x: CGFloat(Int.random(in: SGDeviceManager.shared.deviceType == .pad ? Range(-130...130):Range(-65...65))))
                             .onTapGesture {
                                 selectedIndex = index
                                 DispatchQueue.main.async {

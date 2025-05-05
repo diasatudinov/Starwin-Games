@@ -21,8 +21,8 @@ struct GameView: View {
             SpriteViewContainer(scene: gameScene, isWin: $isWin, score: $score, level: level)
                 .ignoresSafeArea()
             
-            VStack(spacing: 100) {
-                HStack(spacing: 100) {
+            VStack(spacing: SGDeviceManager.shared.deviceType == .pad ? 200:100) {
+                HStack(spacing: SGDeviceManager.shared.deviceType == .pad ? 200:100) {
                     ZStack {
                         Image(.rectangleMainGame)
                             .resizable()
@@ -35,7 +35,7 @@ struct GameView: View {
                             
                         
                     }
-                    .frame(width: 140,height: 200)
+                    .frame(width: SGDeviceManager.shared.deviceType == .pad ? 280:140,height: SGDeviceManager.shared.deviceType == .pad ? 400:200)
                     
                     ZStack {
                         Image(.rectangleMainGame)
@@ -49,10 +49,10 @@ struct GameView: View {
                             
                         
                     }
-                    .frame(width: 140,height: 200)
+                    .frame(width: SGDeviceManager.shared.deviceType == .pad ? 280:140,height: SGDeviceManager.shared.deviceType == .pad ? 400:200)
                 }
                 
-                HStack(spacing: 100) {
+                HStack(spacing: SGDeviceManager.shared.deviceType == .pad ? 200:100) {
                     ZStack {
                         Image(.rectangleMainGame)
                             .resizable()
@@ -65,7 +65,7 @@ struct GameView: View {
                             
                         
                     }
-                    .frame(width: 140,height: 200)
+                    .frame(width: SGDeviceManager.shared.deviceType == .pad ? 280: 140,height: SGDeviceManager.shared.deviceType == .pad ? 400:200)
                     
                     ZStack {
                         Image(.rectangleMainGame)
@@ -79,7 +79,7 @@ struct GameView: View {
                             
                         
                     }
-                    .frame(width: 140,height: 200)
+                    .frame(width: SGDeviceManager.shared.deviceType == .pad ? 280:140,height: SGDeviceManager.shared.deviceType == .pad ? 400:200)
                 }
             }
             
@@ -103,9 +103,9 @@ struct GameView: View {
                                 .frame(height: SGDeviceManager.shared.deviceType == .pad ? 200:100)
                             
                             Text("\(score)")
-                                .font(.system(size: 20, weight: .bold))
+                                .font(.system(size: SGDeviceManager.shared.deviceType == .pad ? 40:20, weight: .bold))
                                 .foregroundStyle(.yellow)
-                                .offset(y: 30)
+                                .offset(y: SGDeviceManager.shared.deviceType == .pad ? 60:30)
                         }
                         Spacer()
                         Button {
@@ -131,11 +131,11 @@ struct GameView: View {
                             .edgesIgnoringSafeArea(.all)
                             .scaledToFill()
                     }
-                    VStack(spacing: -40) {
+                    VStack(spacing: SGDeviceManager.shared.deviceType == .pad ? -80:-40) {
                         Image(.winTextSG)
                             .resizable()
                             .scaledToFit()
-                            .frame(height: 400)
+                            .frame(height: SGDeviceManager.shared.deviceType == .pad ? 800:400)
                         
                         Button {
                             gameScene.restartLevel()
@@ -144,7 +144,7 @@ struct GameView: View {
                             Image(.nextButtonSG)
                                 .resizable()
                                 .scaledToFit()
-                                .frame(height: 100)
+                                .frame(height: SGDeviceManager.shared.deviceType == .pad ? 200:100)
                         }
                     }
                 }

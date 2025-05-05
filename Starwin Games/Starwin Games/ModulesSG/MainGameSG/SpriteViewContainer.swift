@@ -3,7 +3,7 @@ import SpriteKit
 
 
 struct SpriteViewContainer: UIViewRepresentable {
-    @StateObject var user = GEUser.shared
+    @StateObject var user = SGUser.shared
     var scene: GameScene
     @Binding var isWin: Bool
     @Binding var score: Int
