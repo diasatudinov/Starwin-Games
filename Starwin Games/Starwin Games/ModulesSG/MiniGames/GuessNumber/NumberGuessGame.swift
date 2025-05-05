@@ -1,11 +1,3 @@
-//
-//  NumberGuessGame.swift
-//  Starwin Games
-//
-//  Created by Dias Atudinov on 30.04.2025.
-//
-
-
 import SwiftUI
 
 struct NumberGuessGame: View {
@@ -25,7 +17,7 @@ struct NumberGuessGame: View {
 
         var body: some View {
             ZStack {
-                VStack(spacing: 20) {
+                VStack(spacing: SGDeviceManager.shared.deviceType == .pad ? 40:20) {
                     // Top bar
                     HStack(alignment: .top) {
                         Button {
@@ -44,7 +36,7 @@ struct NumberGuessGame: View {
                     Image(.guessTheNumTextSG)
                         .resizable()
                         .scaledToFit()
-                        .frame(height: 130)
+                        .frame(height: SGDeviceManager.shared.deviceType == .pad ? 260:130)
                     // Input slots
                     HStack(spacing: 16) {
                         ForEach(0..<3) { idx in
@@ -56,7 +48,7 @@ struct NumberGuessGame: View {
                                 Text( idx < guessDigits.count ? guessDigits[idx] : "" )
                                     .font(.system(size: 36, weight: .bold))
                                     .foregroundColor(.white)
-                            }.frame(width: 100, height: 100)
+                            }.frame(width: SGDeviceManager.shared.deviceType == .pad ? 150:100, height: SGDeviceManager.shared.deviceType == .pad ? 150:100)
                         }
                     }
                     .padding(.vertical)
@@ -64,7 +56,7 @@ struct NumberGuessGame: View {
 
                     // Number Pad
                     let columns = Array(repeating: GridItem(.flexible(), spacing: 0), count: 3)
-                    LazyVGrid(columns: columns, spacing: 12) {
+                    LazyVGrid(columns: columns, spacing: SGDeviceManager.shared.deviceType == .pad ? 24:12) {
                         ForEach(padNumbers, id: \ .self) { num in
                             Button(action: { numberPressed(num) }) {
                                 ZStack {
@@ -72,13 +64,13 @@ struct NumberGuessGame: View {
                                         .resizable()
                                         .scaledToFit()
                                     Text("\(num)")
-                                        .font(.system(size: 48, weight: .bold))
+                                        .font(.system(size: SGDeviceManager.shared.deviceType == .pad ? 96:48, weight: .bold))
                                         .foregroundColor(.white)
-                                }.frame(width: 100, height: 100)
+                                }.frame(width: SGDeviceManager.shared.deviceType == .pad ? 150:100, height: SGDeviceManager.shared.deviceType == .pad ? 150:100)
                             }
                             .disabled(guessDigits.count >= 3)
                         }
-                    }.frame(width: 350)
+                    }.frame(width: SGDeviceManager.shared.deviceType == .pad ? 500:350)
                     .padding(.horizontal)
 
                     Spacer()
@@ -99,18 +91,18 @@ struct NumberGuessGame: View {
                             Image(.guessHigherSG)
                                 .resizable()
                                 .scaledToFit()
-                                .frame(height: 250)
+                                .frame(height: SGDeviceManager.shared.deviceType == .pad ? 500:250)
                         } else if Int(guessDigits.joined()) ?? 0 > target{
                             Image(.guessLowerSG)
                                 .resizable()
                                 .scaledToFit()
-                                .frame(height: 250)
+                                .frame(height: SGDeviceManager.shared.deviceType == .pad ? 500:250)
                         } else {
-                            VStack(spacing: -40) {
+                            VStack(spacing: SGDeviceManager.shared.deviceType == .pad ? -80:-40) {
                                 Image(.winTextSG)
                                     .resizable()
                                     .scaledToFit()
-                                    .frame(height: 400)
+                                    .frame(height: SGDeviceManager.shared.deviceType == .pad ? 800:400)
                                 
                                 Button {
                                     resetGame()
@@ -118,7 +110,7 @@ struct NumberGuessGame: View {
                                     Image(.nextButtonSG)
                                         .resizable()
                                         .scaledToFit()
-                                        .frame(height: 100)
+                                        .frame(height: SGDeviceManager.shared.deviceType == .pad ? 200:100)
                                 }
                             }
                             
@@ -154,7 +146,7 @@ struct NumberGuessGame: View {
             feedback = "Too high!"
         } else {
             feedback = "You got it in \(attempts) tries!"
-            GEUser.shared.updateUserMoney(for: 100)
+            SGUser.shared.updateUserMoney(for: 100)
         }
         // Only reset if correct to allow victory state
         if feedback.starts(with: "You got it") {

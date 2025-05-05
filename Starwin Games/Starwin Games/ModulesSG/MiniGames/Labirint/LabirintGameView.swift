@@ -33,7 +33,7 @@ struct LabirintGameView: View {
                         Image(.maizeTextSG)
                             .resizable()
                             .scaledToFit()
-                            .frame(height: 150)
+                            .frame(height: SGDeviceManager.shared.deviceType == .pad ? 300:150)
                         Spacer()
 
                     }.padding([.horizontal, .top])
@@ -49,16 +49,16 @@ struct LabirintGameView: View {
                         Image(.controlArrowSG)
                             .resizable()
                             .scaledToFit()
-                            .frame(height: 50)
+                            .frame(height: SGDeviceManager.shared.deviceType == .pad ? 100:50)
                     }
-                    HStack(spacing: 50) {
+                    HStack(spacing: SGDeviceManager.shared.deviceType == .pad ? 100:50) {
                         Button {
                             gameScene.moveLeft()
                         } label: {
                             Image(.controlArrowSG)
                                 .resizable()
                                 .scaledToFit()
-                                .frame(height: 50)
+                                .frame(height: SGDeviceManager.shared.deviceType == .pad ? 100:50)
                                 .rotationEffect(.degrees(90))
                                 .scaleEffect(x: -1, y: 1)
                         }
@@ -69,7 +69,7 @@ struct LabirintGameView: View {
                             Image(.controlArrowSG)
                                 .resizable()
                                 .scaledToFit()
-                                .frame(height: 50)
+                                .frame(height: SGDeviceManager.shared.deviceType == .pad ? 100:50)
                                 .rotationEffect(.degrees(90))
                         }
                     }
@@ -80,7 +80,7 @@ struct LabirintGameView: View {
                         Image(.controlArrowSG)
                             .resizable()
                             .scaledToFit()
-                            .frame(height: 50)
+                            .frame(height: SGDeviceManager.shared.deviceType == .pad ? 100:50)
                             .scaleEffect(x: 1, y: -1)
                     }
                 }
@@ -91,11 +91,11 @@ struct LabirintGameView: View {
                 ZStack {
                     Image(.mazeViewBg)
                         .resizable()
-                    VStack(spacing: -40) {
+                    VStack(spacing: SGDeviceManager.shared.deviceType == .pad ? -80:-40) {
                         Image(.winTextSG)
                             .resizable()
                             .scaledToFit()
-                            .frame(height: 400)
+                            .frame(height: SGDeviceManager.shared.deviceType == .pad ? 800:400)
                         
                         Button {
                             gameScene.restartGame()
@@ -104,7 +104,7 @@ struct LabirintGameView: View {
                             Image(.nextButtonSG)
                                 .resizable()
                                 .scaledToFit()
-                                .frame(height: 100)
+                                .frame(height: SGDeviceManager.shared.deviceType == .pad ? 200:100)
                         }
                     }
                 }

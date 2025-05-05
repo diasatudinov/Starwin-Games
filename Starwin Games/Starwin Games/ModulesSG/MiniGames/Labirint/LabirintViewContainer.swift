@@ -1,17 +1,9 @@
-//
-//  SpriteViewContainer.swift
-//  Starwin Games
-//
-//  Created by Dias Atudinov on 30.04.2025.
-//
-
-
 import SwiftUI
 import SpriteKit
 
 
 struct LabirintViewContainer: UIViewRepresentable {
-    @StateObject var user = GEUser.shared
+    @StateObject var user = SGUser.shared
     var scene: MazeScene
     @Binding var isWin: Bool
     func makeUIView(context: Context) -> SKView {
