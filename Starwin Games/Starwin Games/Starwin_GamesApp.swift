@@ -2,9 +2,11 @@ import SwiftUI
 
 @main
 struct Starwin_GamesApp: App {
+    @UIApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
     var body: some Scene {
         WindowGroup {
-            MenuViewSG()
+            RootSG()
+                .preferredColorScheme(.light)
         }
     }
 }

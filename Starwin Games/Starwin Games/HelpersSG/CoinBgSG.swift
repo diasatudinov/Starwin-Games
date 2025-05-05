@@ -1,7 +1,7 @@
 import SwiftUI
 
 struct CoinBgSG: View {
-    @StateObject var user = GEUser.shared
+    @StateObject var user = SGUser.shared
     var body: some View {
         ZStack {
             Image(.coinsViewBgSG)

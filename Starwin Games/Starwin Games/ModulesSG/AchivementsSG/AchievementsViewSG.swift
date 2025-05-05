@@ -1,10 +1,3 @@
-//
-//  AchievementsViewSG.swift
-//  Starwin Games
-//
-//  Created by Dias Atudinov on 29.04.2025.
-//
-
 import SwiftUI
 
 struct AchievementsViewSG: View {
@@ -32,7 +25,7 @@ struct AchievementsViewSG: View {
                     Image(.achievementTextSG)
                         .resizable()
                         .scaledToFit()
-                        .frame(height: 150)
+                        .frame(height: SGDeviceManager.shared.deviceType == .pad ? 300:150)
                     
                     VStack {
                         
@@ -42,22 +35,22 @@ struct AchievementsViewSG: View {
                                 Image(viewModel.achievements[0].image)
                                     .resizable()
                                     .scaledToFit()
-                                    .frame(height: 150)
+                                    .frame(height: SGDeviceManager.shared.deviceType == .pad ? 300:150)
                                     .opacity(viewModel.achievements[0].isAchieved ? 1 : 0.3)
                                 
                                 ZStack {
                                     Image(.ahivementCountBg)
                                         .resizable()
                                         .scaledToFit()
-                                        .frame(height: 50)
+                                        .frame(height: SGDeviceManager.shared.deviceType == .pad ? 100:50)
                                     
                                     if viewModel.achievements[0].achievedMaxCount == 1 {
                                         Text("-")
-                                            .font(.system(size: 20, weight: .black))
+                                            .font(.system(size: SGDeviceManager.shared.deviceType == .pad ? 40:20, weight: .black))
                                             .foregroundStyle(.yellow)
                                     } else {
                                         Text("\(viewModel.achievements[0].achievedCount)/\(viewModel.achievements[0].achievedMaxCount)")
-                                            .font(.system(size: 20, weight: .black))
+                                            .font(.system(size: SGDeviceManager.shared.deviceType == .pad ? 40:20, weight: .black))
                                             .foregroundStyle(.yellow)
                                     }
                                 }
@@ -67,23 +60,23 @@ struct AchievementsViewSG: View {
                                 Image(viewModel.achievements[1].image)
                                     .resizable()
                                     .scaledToFit()
-                                    .frame(height: 150)
+                                    .frame(height: SGDeviceManager.shared.deviceType == .pad ? 300:150)
                                     .opacity(viewModel.achievements[1].isAchieved ? 1 : 0.3)
                                 
                                 ZStack {
                                     Image(.ahivementCountBg)
                                         .resizable()
                                         .scaledToFit()
-                                        .frame(height: 50)
+                                        .frame(height: SGDeviceManager.shared.deviceType == .pad ? 100:50)
                                         
                                     
                                     if viewModel.achievements[1].achievedMaxCount == 1 {
                                         Text("-")
-                                            .font(.system(size: 20, weight: .black))
+                                            .font(.system(size: SGDeviceManager.shared.deviceType == .pad ? 40:20, weight: .black))
                                             .foregroundStyle(.yellow)
                                     } else {
                                         Text("\(viewModel.achievements[1].achievedCount)/\(viewModel.achievements[1].achievedMaxCount)")
-                                            .font(.system(size: 20, weight: .black))
+                                            .font(.system(size: SGDeviceManager.shared.deviceType == .pad ? 40:20, weight: .black))
                                             .foregroundStyle(.yellow)
                                     }
                                 }
@@ -95,22 +88,22 @@ struct AchievementsViewSG: View {
                                 Image(viewModel.achievements[2].image)
                                     .resizable()
                                     .scaledToFit()
-                                    .frame(height: 150)
+                                    .frame(height: SGDeviceManager.shared.deviceType == .pad ? 300:150)
                                     .opacity(viewModel.achievements[2].isAchieved ? 1 : 0.3)
                                 
                                 ZStack {
                                     Image(.ahivementCountBg)
                                         .resizable()
                                         .scaledToFit()
-                                        .frame(height: 50)
+                                        .frame(height: SGDeviceManager.shared.deviceType == .pad ? 100:50)
                                     
                                     if viewModel.achievements[2].achievedMaxCount == 1 {
                                         Text("-")
-                                            .font(.system(size: 20, weight: .black))
+                                            .font(.system(size: SGDeviceManager.shared.deviceType == .pad ? 40:20, weight: .black))
                                             .foregroundStyle(.yellow)
                                     } else {
                                         Text("\(viewModel.achievements[2].achievedCount)/\(viewModel.achievements[2].achievedMaxCount)")
-                                            .font(.system(size: 20, weight: .black))
+                                            .font(.system(size: SGDeviceManager.shared.deviceType == .pad ? 40:20, weight: .black))
                                             .foregroundStyle(.yellow)
                                     }
                                 }
@@ -120,22 +113,22 @@ struct AchievementsViewSG: View {
                                 Image(viewModel.achievements[3].image)
                                     .resizable()
                                     .scaledToFit()
-                                    .frame(height: 150)
+                                    .frame(height: SGDeviceManager.shared.deviceType == .pad ? 300:150)
                                     .opacity(viewModel.achievements[3].isAchieved ? 1 : 0.3)
                                 
                                 ZStack {
                                     Image(.ahivementCountBg)
                                         .resizable()
                                         .scaledToFit()
-                                        .frame(height: 50)
+                                        .frame(height: SGDeviceManager.shared.deviceType == .pad ? 100:50)
                                     
                                     if viewModel.achievements[3].achievedMaxCount == 1 {
                                         Text("-")
-                                            .font(.system(size: 20, weight: .black))
+                                            .font(.system(size: SGDeviceManager.shared.deviceType == .pad ? 40:20, weight: .black))
                                             .foregroundStyle(.yellow)
                                     } else {
                                         Text("\(viewModel.achievements[3].achievedCount)/\(viewModel.achievements[3].achievedMaxCount)")
-                                            .font(.system(size: 20, weight: .black))
+                                            .font(.system(size: SGDeviceManager.shared.deviceType == .pad ? 40:20, weight: .black))
                                             .foregroundStyle(.yellow)
                                     }
                                 }
@@ -145,7 +138,7 @@ struct AchievementsViewSG: View {
                         
                     }
                     
-                }.offset(y: -40)
+                }.offset(y: SGDeviceManager.shared.deviceType == .pad ? -80:-40)
                 Spacer()
             }
             
